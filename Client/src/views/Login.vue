@@ -24,7 +24,7 @@ export default {
     login: function() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         (user) => {
-          this.$router.replace('home')
+          this.$router.replace('admin')
         },
         (err) => {
           alert('Oops ' + err.message)
