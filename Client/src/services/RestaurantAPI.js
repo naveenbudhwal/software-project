@@ -2,6 +2,6 @@ import API from './API.js'
 
 export default {
   getMenuItems() {
-    return API().get('todo')
+    return API().get('menuItems')
   }
 }
