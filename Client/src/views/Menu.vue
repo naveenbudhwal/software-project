@@ -4,7 +4,11 @@
     <hr>
     <ul>
       <li v-for="item in menuItems">
-        {{item}}
+        <div class="body">
+          <img :src="item.image" alt="Image of food">
+          <div class="item-name">{{item.name}}</div>
+          <div class="price">{{item.price}}</div>
+        </div>
       </li>
     </ul>
   </div>
