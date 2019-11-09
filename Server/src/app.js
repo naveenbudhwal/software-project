@@ -10,12 +10,12 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cors())
 
-// app.get('/todo', (req, res) => {
-//   res.send([
-//     'Thing 1',
-//     'Thing 2'
-//   ])
-// })
+app.get('/todo', (req, res) => {
+  res.send([
+    'Thing 1',
+    'Thing 2'
+  ])
+})
 
 
 app.listen(process.env.PORT || 8082) // client is already running on 8080
