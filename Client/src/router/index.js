@@ -5,17 +5,26 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
+import Admin from '../views/Admin.vue'
+import Menu from '../views/Menu.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '*',
-    redirect: '/login'
-  },
+  // {
+  //   path: '*',
+  //   redirect: '/login'
+  // },
   {
     path: '/',
-    redirect: '/login'
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: Menu
+
   },
   {
     path: '/login',
@@ -28,9 +37,9 @@ const routes = [
     component: SignUp
   },
   {
-    path: '/home',
-    name: 'home',
-    component: Home,
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
     meta: {
       requiresAuth: true
     }
@@ -48,7 +57,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   if(requiresAuth && !currentUser) next('login')
-  else if (!requiresAuth && currentUser) next('home')
+  else if (!requiresAuth && currentUser) next('admin')
   else next();
 })
 
