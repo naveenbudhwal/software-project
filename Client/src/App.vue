@@ -10,10 +10,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <router-link to="/home">Home <span class="sr-only">(current)</span> </router-link>
+            <router-link to="/">Home <span class="sr-only">(current)</span> </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="">Menu </router-link>
+            <router-link to="/menu">Menu </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/login">Login </router-link>
@@ -36,6 +36,7 @@
 
 .navbar {
   margin-top: 25px;
+  margin-bottom: 50px;
 }
 
 .navbar ul li a {
