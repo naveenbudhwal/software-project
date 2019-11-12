@@ -23,6 +23,7 @@ mongoClient.connect((err, db) => {
     console.log('Error occured while connecting to database', err)
     return
   }
+  console.log('DB connected successfully!')
   client = db
 })
 
@@ -37,12 +38,53 @@ app.get('/menuItems', (req, res) => {
   const collection = client.db('Restaurant').collection('menu')
   collection.find().toArray(function(err, results) {
     if(err) {
-      console.log('Oops' + err)
+      console.log('Error retreiving menu items from DB' + err)
       res.send([])
       return
     }
     
     res.send(results)
+  })
+})
+
+app.post('/addToCart', (req, res) => {
+  const collection = client.db('Restaurant').collection('cart')
+  var itemName = req.body.item.name
+  var itemPrice = req.body.item.price
+  var itemImage = req.body.item.image
+  collection.insertOne({name: itemName, price: itemPrice, image: itemImage}, function(err, results) {
+    if(err) {
+      console.log('Oops' + err)
+      res.send('')
+      return
+    }
+    console.log('Item added successfully!')
+    res.send(results.ops[0])
+  })
+})
+
+app.get('/cartItems', (req, res) => {
+  const collection = client.db('Restaurant').collection('cart')
+  collection.find().toArray(function(err, results) {
+    if(err) {
+      console.log('Error retreiving cart items from DB' + err)
+      res.send([])
+      return
+    }
+    res.send(results)
+  })
+})
+
+app.post('/deleteCartItem', (req, res) => {
+  const collection = client.db('Restaurant').collection('cart')
+  collection.removeOne({name: req.body.item.name}, function(err, results) {
+    if(err) {
+      console.log('Error deleting cart items' + err) 
+      res.send('')
+      return
+    }
+    console.log('Item removed from cart')
+    res.send() // Return
   })
 })
 
