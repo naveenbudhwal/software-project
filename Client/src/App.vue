@@ -16,6 +16,12 @@
             <router-link to="/menu">Menu </router-link>
           </li>
           <li class="nav-item">
+            <router-link to="/cart">
+              Cart
+              <counter-badge :count="cartCount"></counter-badge> 
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link to="/login">Login </router-link>
           </li>
         </ul>
@@ -24,6 +30,21 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+
+import CounterBadge from './components/CounterBadge.vue';
+
+export default {
+  name: 'app',
+  components: { CounterBadge },
+  computed: {
+    cartCount() {
+      return this.$store.state.cart.length
+    }
+  }
+}
+</script>
 
 <style scoped>
 #app {
