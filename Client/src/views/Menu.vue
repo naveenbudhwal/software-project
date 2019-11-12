@@ -8,6 +8,7 @@
           <img :src="item.image" alt="Image of food">
           <div class="item-name">{{item.name}}</div>
           <div class="price">{{item.price}}</div>
+          <button @click="addToCart(item)">Add to cart</button>
         </div>
       </li>
     </ul>
@@ -31,6 +32,10 @@ export default {
     async loadMenuItems() {
       const response = await RestaurantServices.getMenuItems();
       this.menuItems = response.data;
+    },
+    async addToCart(item) {
+      const response = await RestaurantServices.addToCart(item)
+      this.$store.dispatch('addToCart', item)
     }
   }
 }
