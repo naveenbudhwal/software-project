@@ -47,6 +47,35 @@ app.get('/menuItems', (req, res) => {
   })
 })
 
+app.post('addMenuItem', (req, res) => {
+  const collection = client.db('Restaurant').collection('menu')
+  var itemName = req.body.item.name
+  var itemPrice = req.body.item.price
+  var itemImage = req.body.item.image
+  collection.insertOne({name: itemName, price: itemPrice, image: itemImage}, function(err, results) {
+    if(err) {
+      console.log('Error adding item to menu' + err)
+      res.send('')
+      return
+    }
+    console.log('Item added successfully!')
+    res.send(results.ops[0])
+  })
+})
+
+app.post('/deleteMenuItem', (req, res) => {
+  const collection = client.db('Restaurant').collection('menu')
+  collection.removeOne({name: req.body.item.name}, function(err, results) {
+    if(err) {
+      console.log('Error deleting Menu item' + err) 
+      res.send('')
+      return
+    }
+    console.log('Item removed from menu')
+    res.send() // Return
+  })
+})
+
 app.post('/addToCart', (req, res) => {
   const collection = client.db('Restaurant').collection('cart')
   var itemName = req.body.item.name
@@ -54,7 +83,7 @@ app.post('/addToCart', (req, res) => {
   var itemImage = req.body.item.image
   collection.insertOne({name: itemName, price: itemPrice, image: itemImage}, function(err, results) {
     if(err) {
-      console.log('Oops' + err)
+      console.log('Error adding item to cart' + err)
       res.send('')
       return
     }

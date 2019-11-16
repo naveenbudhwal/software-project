@@ -8,6 +8,7 @@ import SignUp from '../views/SignUp.vue'
 import Admin from '../views/Admin.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
+import AddItems from '../views/AddItems.vue'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,11 @@ const routes = [
     name: 'cart',
     component: Cart
   },
+  // {
+  //   path: '/add-menu-items',
+  //   name: 'addItems',
+  //   component: AddItems
+  // },
   {
     path: '/login',
     name: 'login',
@@ -46,6 +52,12 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: Admin,
+    children: [
+      {
+        path: 'add-menu-items',
+        component: AddItems
+      }
+    ],
     meta: {
       requiresAuth: true
     }

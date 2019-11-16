@@ -4,6 +4,16 @@ export default {
   getMenuItems() {
     return API().get('menuItems')
   },
+  addMenuItems(item) {
+    return API().post('addMenuItem', {
+      item: item
+    })  
+  },
+  deleteMenuItem(item) {
+    return API().post('deleteMenuItem', {
+      item: item
+    })
+  },
   addToCart(item) {
     return API().post('addToCart', {
       item: item
