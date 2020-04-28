@@ -14,17 +14,13 @@ export default {
       item: item
     })
   },
-  addToCart(item) {
-    return API().post('addToCart', {
-      item: item
+  addOrderItems(order, info) {
+    return API().post('addOrder', {
+      order: order,
+      info: info
     })
   },
-  getCartItems() {
-    return API().get('cartItems')
-  },
-  deleteCartItem(item) {
-    return API().post('deleteCartItem', {
-      item: item
-    })
+  loadOrderItems() {
+    return API().get('orderItems')
   }
 }

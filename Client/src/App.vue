@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <img src="./assets/logo.png" alt="Vue logo"> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-      <a class="navbar-brand" href="#">Restaurant Management System</a>
+      <router-link to="/" class="navbar-brand">RMS</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -16,43 +16,52 @@
             <router-link to="/menu">Menu </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/cart">
-              Cart
-              <counter-badge :count="cartCount"></counter-badge> 
-            </router-link>
-          </li>
-          <li class="nav-item">
             <router-link to="/login">Login </router-link>
           </li>
         </ul>
       </div>
     </nav>
-    <router-view/>
+    <transition name="fade-in" mode="out-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
 <script>
-
-import CounterBadge from './components/CounterBadge.vue';
-
 export default {
-  name: 'app',
-  components: { CounterBadge },
-  computed: {
-    cartCount() {
-      return this.$store.state.cart.length
-    }
-  }
+  name: 'app'
 }
 </script>
 
 <style scoped>
+
+/* --------- Transition Styles ---------- */
+
+.fade-in-enter {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-in-enter-active,
+.fade-in-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-in-leave {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* -------------------------------------- */
+
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  font-weight: 500;
 }
 
 .navbar {
@@ -63,6 +72,12 @@ export default {
 .navbar ul li a {
   margin: 0 20px;
   font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.navbar ul li a:hover {
+  text-decoration: none;
+  color: #1F60F0;
 }
 
 .navbar-brand {
@@ -70,5 +85,12 @@ export default {
   margin-left: 20px;
 }
 
+.navbar-nav li.active > a {
+	color: #1F60F0;
+}
+
+.navbar-nav {
+  margin-right: 40px;
+}
 
 </style>

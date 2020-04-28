@@ -19,8 +19,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20px;
-  width: 20px;
+  height: 25px;
+  width: 25px;
   border-radius: 20px;
   background-color: #42b983;
   color: #FFF;

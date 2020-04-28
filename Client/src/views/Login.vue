@@ -1,10 +1,9 @@
 <template>
   <div class="login">
-    <h3>Sign In</h3>
-    <input type="text" v-model="email" placeholder="Email"><br>
-    <input type="password" v-model="password" placeholder="Password"><br>
+    <h3>Admin Login</h3>
+    <input type="text" v-model="email" placeholder="Email" required><br>
+    <input type="password" v-model="password" placeholder="Password" required><br>
     <button @click="login">Login</button>
-    <p>You don't have an account? You can <router-link to="/sign-up">create one</router-link></p>
   </div>
 </template>
 
@@ -13,47 +12,38 @@
 import firebase from 'firebase'
 
 export default {
-  name: 'Login',
+  name: 'login',
   data() {
     return {
       email: '',
-      password: ''
-    };
+      password: '',
+    }
   },
   methods: {
-    login: function() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-        (user) => {
-          this.$router.replace('admin')
-        },
-        (err) => {
-          alert('Oops ' + err.message)
-        }
-      )
+    login() {
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then((user) => {
+        this.$router.replace('admin')
+      }).catch((error) => {
+        console.log('Error logging in ' + error)
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-.login {
-  margin-top: 3%;
-}
 
 input {
   width: 20%;
   padding: 10px;
   margin: 10px 0;
+  outline: none;
 }
 
 button {
   margin: 20px 0;
   cursor: pointer;
   padding: 5px 10px;
-}
-
-p {
-  font-size: 13px;
 }
 
 </style>

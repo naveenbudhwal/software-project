@@ -9,6 +9,14 @@ import Admin from '../views/Admin.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
 import AddItems from '../views/AddItems.vue'
+import Order from '../views/Order.vue'
+import Payment from '../views/Payment.vue'
+import Report from '../views/Report.vue'
+
+// const originalPush = VueRouter.prototype.push;
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// };
 
 Vue.use(VueRouter)
 
@@ -33,6 +41,16 @@ const routes = [
     name: 'cart',
     component: Cart
   },
+  {
+    path: '/order',
+    name: 'order',
+    component: Order
+  },
+  {
+    path: '/payment',
+    name: 'payment',
+    component: Payment
+  },
   // {
   //   path: '/add-menu-items',
   //   name: 'addItems',
@@ -52,12 +70,22 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: Admin,
-    children: [
-      {
-        path: 'add-menu-items',
-        component: AddItems
-      }
-    ],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/add-menu-items',
+    name: 'addMenuItems',
+    component: AddItems,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin/report',
+    name: 'report',
+    component: Report,
     meta: {
       requiresAuth: true
     }

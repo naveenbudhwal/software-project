@@ -47,7 +47,7 @@ app.get('/menuItems', (req, res) => {
   })
 })
 
-app.post('addMenuItem', (req, res) => {
+app.post('/addMenuItem', (req, res) => {
   const collection = client.db('Restaurant').collection('menu')
   var itemName = req.body.item.name
   var itemPrice = req.body.item.price
@@ -117,5 +117,46 @@ app.post('/deleteCartItem', (req, res) => {
   })
 })
 
+app.post('/addOrder', (req, res) => {
+  const collection = client.db('Restaurant').collection('orders')
+  var items = req.body.order
+  var customerName = req.body.info.customerName
+  var customerMobile = req.body.info.customerMobileNo
+  var customerEmail = req.body.info.customerEmail
+  var feedback = req.body.info.feedback
+  var date = req.body.info.date
+  var time = req.body.info.time
+  collection.insertOne({order: items, customerName: customerName, customerMobile: customerMobile, customerEmail: customerEmail, feedback: feedback, date: date, time: time}, function(err, results) {
+    if(err) {
+      console.log('Error logging order to DB' + err)
+      res.send('')
+      return
+    }
+    console.log('Order logged to DB successfully!')
+    res.send(results.ops[0])
+  })
+  const collection1 = client.db('Restaurant').collection('cart')
+  collection1.deleteMany({}, function(err, results) {
+    if(err) {
+      console.log('Error emptying cart' + err)
+      res.send('')
+      return
+    }
+    console.log('Cart emptied successfully!!')
+  })
+})
+
+app.get('/orderItems', (req, res) => {
+  const collection = client.db('Restaurant').collection('orders')
+  collection.find().toArray(function(err, results) {
+    if(err) {
+      console.log('Error retreiving order items from DB' + err)
+      res.send([])
+      return
+    }
+
+    res.send(results)
+  })
+})
 
 app.listen(process.env.PORT || 8082) // client is already running on 8080
