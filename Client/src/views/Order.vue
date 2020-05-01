@@ -3,7 +3,7 @@
   <h1>Order Placed Successfully!</h1>
   <button class="make-bill" @click="makeBill">View Bill</button>
   <div class="view-bill" v-if="viewBill">
-    <bill :billItems="cart" :total="billTotal" :tax="tax"></bill>
+    <bill :billItems="cart.cart" :total="cart.billTotal" :tax="tax"></bill>
   </div>
   <div class="customer-info">
     <p><i class="fas fa-info-circle"></i> Please fill out your information</p>
@@ -39,8 +39,6 @@ export default {
   },
   methods: {
     async payBill(item) {
-      // Empty cart
-      this.$store.dispatch('emptyCart')
       var d = new Date();
       var currentDate = d.getDate() + "/" + (d.getMonth()+1)  + "/" + d.getFullYear()  
       var currentTime = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
@@ -52,7 +50,8 @@ export default {
         date: currentDate,
         time: currentTime
       }
-      const response = await RestaurantServices.addOrderItems(this.cartItems, info)
+      const response = await RestaurantServices.addOrderItems(this.cart.cart, info)
+      this.$store.dispatch('cart/emptyCart', null, { root: true })
       this.$router.replace('payment')
     },
     makeBill() {
@@ -60,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['cart', 'billTotal'])
+    ...mapState(['cart'])
   }
 }
 </script>

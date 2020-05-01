@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <h3 class="heading">Login to Console</h3>
-    <input type="text" v-model="email" placeholder="Email" required><br>
-    <input type="password" v-model="password" placeholder="Password" required><br>
+    <input type="text" v-model="email" placeholder="Email" required @keyup.enter="login"><br>
+    <input type="password" v-model="password" placeholder="Password" required @keyup.enter="login"><br>
     <button class="login-btn" @click="login">Login</button>
   </div>
 </template>
@@ -57,6 +57,11 @@ input {
   outline: none;
   border: 1px solid #D1D1D1;
   border-radius: 0.2em;
+  transition: all 0.1s ease-in-out;
+}
+
+input:focus {
+  border: 1.5px solid #0069FF;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

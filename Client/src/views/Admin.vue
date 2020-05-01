@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1><i class="fas fa-users-cog"></i> Admin page</h1>
+    <h1><i class="fas fa-users-cog"></i> Welcome back Craig</h1>
     <hr class="heading-hr">
     <router-link to="/admin/add-menu-items">
       <!-- <button class="add-menu-items">Add items to menu</button> -->
@@ -14,7 +14,7 @@
     </div>
     <hr class="body-hr">
     <ul>
-      <li v-for="item in menuItems">
+      <li v-for="(item,index) in menu.menuItems" :key="index">
         <div class="menu-body">
           <div class="delete-item" @click="deleteItems(item)">
             <i class="fas fa-minus-circle"></i>
@@ -37,34 +37,28 @@
 
 <script>
 import firebase from 'firebase'
-import RestaurantServices from '../services/RestaurantAPI.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'admin',
-  data() {
-    return {
-      menuItems: []
-    }
-  },
   mounted() {
     this.loadMenuItems();
   },
   methods: {
-    async loadMenuItems() {
-      const response = await RestaurantServices.getMenuItems();
-      this.menuItems = response.data;
+    loadMenuItems() {
+      this.$store.dispatch('menu/loadItems', null, { root:true })  
     },
     deleteItems(item) {
-      RestaurantServices.deleteMenuItem(item)
-      this.menuItems = this.menuItems.filter(function(obj) {
-        return obj.name !== item.name;
-      });
+      this.$store.dispatch('menu/deleteItem', item, { root: true })
     },
-    logout: function() {
+    logout() {
       firebase.auth().signOut().then(() => {
         this.$router.push('login')
       })
     }
+  },
+  computed: {
+    ...mapState(['menu'])
   }
 }
 </script>

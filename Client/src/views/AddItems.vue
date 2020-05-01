@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import RestaurantServices from '../services/RestaurantAPI.js'
 
 export default {
   name: 'add-menu-items',
@@ -24,13 +23,14 @@ export default {
     }
   }, 
   methods: {
-    async addMenuItem() {
-      var item = {
+    addMenuItem() {
+      const item = {
         name: this.name,
         price: this.price,
         image: this.image
       }
-      const response = await RestaurantServices.addMenuItems(item)
+      this.$store.dispatch('menu/addItem', item, { root: true })
+      // this.$store.commit('NEW_ITEM_ADDED')
       this.$router.replace('/admin')
     }
   }

@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import SignUp from '../views/SignUp.vue'
 import Admin from '../views/Admin.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
@@ -13,10 +12,6 @@ import Order from '../views/Order.vue'
 import Payment from '../views/Payment.vue'
 import Report from '../views/Report.vue'
 
-// const originalPush = VueRouter.prototype.push;
-// VueRouter.prototype.push = function push(location) {
-//   return originalPush.call(this, location).catch(err => err)
-// };
 
 Vue.use(VueRouter)
 
@@ -60,11 +55,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
-  },
-  {
-    path: '/sign-up',
-    name: 'signUp',
-    component: SignUp
   },
   {
     path: '/admin',

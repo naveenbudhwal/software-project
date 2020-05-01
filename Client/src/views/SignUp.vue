@@ -24,6 +24,11 @@ export default {
     signUp: function() {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
         (user) => {
+          if (user) {
+            user.updateProfile({
+              displayName: 'Craig'
+            })
+          }
           this.$router.replace('login')
         },
         (err) => {

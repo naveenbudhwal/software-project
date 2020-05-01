@@ -1,14 +1,8 @@
 <template>
   <div class="menu">
-    <!-- <notification-bar  
-      notificationType="info"
-    >
-      Success, Order has been added
-    </notification-bar> -->
     <h1>Menu</h1>
     <div class="cart">
       <router-link to="/cart">
-        <!-- <img src="../assets/cart.png" alt="Cart"> -->
         <i class="fas fa-shopping-cart"></i>
         <counter-badge :count="cartLength"></counter-badge> 
       </router-link>
@@ -17,7 +11,7 @@
     <hr class="minimal">
     <div class="menu-items">
       <ul>
-        <li v-for="(item,index) in menuItems" :key="index">
+        <li v-for="(item,index) in menu.menuItems" :key="index">
           <div class="body">
             <img class="item-image" :src="item.image" alt="Image of food">
             <div class="item-name">{{item.name}}</div>
@@ -32,26 +26,25 @@
 
 <script>
 import CounterBadge from '../components/CounterBadge.vue';
-import NotificationBar from '@/components/NotificationBar.vue';
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'menu-items',
-  components: { CounterBadge, NotificationBar },
+  components: { CounterBadge },
   created() {
     this.loadMenuItems();
   },
   methods: {
     loadMenuItems() {
-      this.$store.dispatch('loadMenu')  
+      this.$store.dispatch('menu/loadItems', null, { root:true })  
     },
     addToCart(item) {
-      this.$store.dispatch('addToCart', item)
+      this.$store.dispatch('cart/addToCart', item, { root: true })
     }
   },
   computed: {
-    ...mapState(['menuItems']),
-    ...mapGetters(['cartLength'])
+    ...mapState(['menu']),
+    ...mapGetters('cart', ['cartLength'])
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <hr>
     <div class="cart">
       <ul>
-        <li v-for="(item,index) in cart" :key="index">
+        <li v-for="(item,index) in cart.cart" :key="index">
           <div class="cart-items">
             <div class="delete-item" @click="deleteItems(item)">
               <i class="fas fa-trash-alt"></i>
@@ -15,44 +15,38 @@
         </li>
       </ul>
     </div>
-    <div v-if="!billTotal">
+    <div v-if="!cart.billTotal">
       <p>Your cart is empty</p>
       <p>Go back to the menu and add some food</p>
     </div>
-    <div v-if="billTotal>0" class="bill-total">Total: {{billTotal}}</div>
-    <div class="link" v-if="billTotal>0">
+    <div v-if="cart.billTotal>0" class="bill-total">Total: {{cart.billTotal}}</div>
+    <div class="link" v-if="cart.billTotal>0">
       <router-link class="link" to="/menu">Order more food</router-link>
     </div>
-    <button :class="{disabled: !billTotal}" :disabled=!billTotal @click="orderItems">Order Now</button>
+    <button :class="{disabled: !cart.billTotal}" :disabled=!cart.billTotal @click="orderItems">Order Now</button>
   </div>
 </template>
 
 <script>
-import RestaurantServices from '../services/RestaurantAPI.js'
 import { mapState } from 'vuex'
 
 export default {
-  data() {
-    return {
-      cartItems: [],
-    }
-  },
   mounted() {
     this.calcBillTotal()
   },
   methods: {
     calcBillTotal() {
-      this.$store.dispatch('calcBillTotal')
+      this.$store.dispatch('cart/calcBillTotal', null, { root: true })
     },
     deleteItems(item) {
-      this.$store.dispatch('removeFromCart', item)
+      this.$store.dispatch('cart/removeFromCart', item, { root: true })
     },
     orderItems() {
       this.$router.replace('order')
     }
   },
   computed: {
-    ...mapState(['cart', 'billTotal'])
+    ...mapState(['cart'])
   }
 }
 </script>
