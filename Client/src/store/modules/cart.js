@@ -11,7 +11,7 @@ export const mutations = {
   },
   REMOVE_FROM_CART(state, payload) {
     state.billTotal = state.billTotal - payload.price
-    var indexToDelete = state.cart.indexOf(payload);
+    let indexToDelete = state.cart.indexOf(payload);
     state.cart.splice(indexToDelete, 1);
   },
   SET_BILL_TOTAL(state, payload) {
@@ -23,10 +23,20 @@ export const mutations = {
 }
 
 export const actions = {
-  addToCart({ commit }, payload) {
+  addToCart({ commit, dispatch }, payload) {
+    const notification = {
+      type: 'success',
+      message: 'Item added to cart'
+    }
+    dispatch('notification/add', notification, { root: true })
     commit('ADD_TO_CART', payload)
   },
-  removeFromCart({ commit }, payload) {
+  removeFromCart({ commit, dispatch }, payload) {
+    const notification = {
+      type: 'info',
+      message: 'Item removed from cart'
+    }
+    dispatch('notification/add', notification, { root: true })
     commit('REMOVE_FROM_CART', payload);
   },
   calcBillTotal({ commit, state }) {

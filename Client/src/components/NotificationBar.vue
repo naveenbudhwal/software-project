@@ -1,71 +1,84 @@
 <template>
-  <transition name="drop-in" mode="out-in" appear>
-    <div class="notification-bar" :class="notificationType">
-      <slot></slot>
+  <transition name="slide-in" mode="out-in" appear>
+    <div class="notification-bar" :class="notificationTypeClass">
+      <p>{{ notification.message }}</p>
     </div>
   </transition>
 </template>
 
 <script>
-export default {
-  name: 'notification-bar',
-  props: {
-    notificationType: {
-      type: String,
-      required: true
-    }
+  import { mapActions } from 'vuex'
+
+  export default {
+    props: {
+      notification: {
+        type: Object,
+        required: true
+      },
+    },
+    mounted() {
+      this.timeout = setTimeout(() => this.remove(this.notification), 2000)
+    },
+    beforeDestroy() {
+      clearTimeout(this.timeout)
+    },
+    data() {
+      return {
+        timeout: null
+      }
+    },
+    computed: {
+      notificationTypeClass() {
+        return `-text-${this.notification.type}`
+      }
+    },
+    methods: mapActions('notification', ['remove'])
   }
-}
 </script>
 
-<style scoped>
-
-/* --------- Transition styles --------- */
-
-.drop-in-enter {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
-.drop-in.enter-active,
-.drop-in-leave-active {
-  transition: all 0.3s ease-in-out;
-}
-
-.notification-bar.drop-in-leave {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
-/* ------------------------------------- */
-
+<style lang="css">
 .notification-bar {
-  width: 40%;
-  margin: auto;
-  border-radius: 0.3em;
-  text-align: left;
-  font-weight: 600;
+  margin: 1em 0 1em;
   padding: 1em;
 }
 
-.success {
-  background: #00C851;
-  color: #fff;
+p {
+  margin: 0;
+  padding: 0;
 }
 
-.danger {
-  background: #ff4444;
-  color: #fff;
+.-text-success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
 }
 
-.info {
-  background: #2b70dc;
-  color: #fff;
+.-text-info {
+  color: #00529B;
+  background-color: #BDE5F8;
 }
 
-.warning {
-  background: #ffbb33;
-  color: #fff;
+.-text-error {
+  color: #D8000C;
+  background-color: #FFD2D2;
 }
+
+/* ------------ Transition styles -------------- */
+
+.slide-in-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.slide-in-enter-active,
+.slide-in-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.slide-in-leave {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* --------------------------------------------- */
 
 </style>

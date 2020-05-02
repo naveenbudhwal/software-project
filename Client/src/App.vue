@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NotificationContainer/> 
     <!-- <img src="./assets/logo.png" alt="Vue logo"> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
       <router-link to="/" class="navbar-brand">RMS</router-link>
@@ -28,8 +29,13 @@
 </template>
 
 <script>
+import NotificationContainer from '@/components/NotificationContainer.vue';
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    NotificationContainer
+  }
 }
 </script>
 
