@@ -66,7 +66,8 @@ ul,li {
 }
 
 .bill {
-  width: 500px;
+  max-width: 500px;
+  width: 70%;
   margin-left: 50%;
   transform: translateX(-50%);
   font-weight: 400;

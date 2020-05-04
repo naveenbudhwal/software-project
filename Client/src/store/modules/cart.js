@@ -19,6 +19,24 @@ export const mutations = {
   },
   EMPTY_CART(state, payload) {
     state.cart.splice(0, state.cart.length)
+  },
+  INCREMENT_QTY(state, item) {
+    for(const i of state.cart) {
+      if(i.name === item.name) {
+        i.qty += 1
+        state.billTotal = Number(state.billTotal) + Number(item.price)
+        break
+      }
+    }
+  },
+  DECREMENT_QTY(state, item) {
+    for(const i of state.cart) {
+      if(i.name === item.name && i.qty > 1) {
+        i.qty -= 1
+        state.billTotal = Number(state.billTotal) - Number(item.price)
+        break
+      }
+    }
   }
 }
 
@@ -42,9 +60,15 @@ export const actions = {
   calcBillTotal({ commit, state }) {
     let billTotal = 0
     state.cart.forEach(item => {
-      billTotal = Number(billTotal) + Number(item.price)
+      billTotal = Number(billTotal) + Number(item.price)*Number(item.qty)
     });
     commit('SET_BILL_TOTAL', billTotal)
+  },
+  increment({ commit }, item) {
+    commit('INCREMENT_QTY', item)
+  },
+  decrement({ commit }, item) {
+    commit('DECREMENT_QTY', item)
   },
   emptyCart({ commit }, payload) {
     commit('EMPTY_CART', payload)

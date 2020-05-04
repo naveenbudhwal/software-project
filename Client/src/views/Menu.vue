@@ -15,7 +15,7 @@
           <div class="body">
             <img class="item-image" :src="item.image" alt="Image of food">
             <div class="item-name">{{item.name}}</div>
-            <div class="price"><span class="rupee"><img src="../assets/rupee.png" alt=""></span>{{item.price}}</div>
+            <div class="price"><span class="rupee">₹</span> {{item.price}}</div>
             <button @click="addToCart(item)">Add +</button>
           </div>
         </li>

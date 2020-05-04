@@ -1,29 +1,91 @@
 <template>
   <div class="cart-page">
-    <h2><i class="fas fa-shopping-cart"></i> Cart</h2>
-    <hr>
-    <div class="cart">
-      <ul>
-        <li v-for="(item,index) in cart.cart" :key="index">
-          <div class="cart-items">
-            <div class="delete-item" @click="deleteItems(item)">
-              <i class="fas fa-trash-alt"></i>
+    <div class="first-half">
+      <h2><i class="fas fa-shopping-cart"></i> Cart</h2>
+      <div class="cart">
+        <ul class="list">
+          <li v-for="(item,index) in cart.cart" :key="index">
+            <div class="cart-items">
+              <div class="item-desc">
+                <div class="item-image"><img :src="item.image" alt="Food"></div>
+                <div class="item-name">{{item.name}}</div>
+              </div>
+              <div class="item-qty">
+                <span @click="decrementQty(item)">-</span>
+                <input type="text" :value="item.qty">
+                <span @click="incrementQty(item)">+</span>
+              </div>
+              <div class="item-price">₹ {{item.price}}</div> 
+              <div class="delete-item" @click="deleteItems(item)">
+                <!-- <i class="fas fa-trash-alt"></i> -->
+                <span>x</span>
+              </div>
             </div>
-            <div class="item-name">{{item.name}}</div>
-            <div class="item-price"><img src="../assets/rupee.png" alt="rupee sign">{{item.price}}</div> 
+          </li>
+        </ul>
+        <div class="row">
+          <div class="link" v-if="cart.billTotal>0">
+            <router-link to="/menu"><span><i class="fas fa-long-arrow-alt-left"></i></span> Order more</router-link>
           </div>
-        </li>
-      </ul>
+          <div v-if="cart.billTotal>0" class="bill-total">SubTotal: <span>₹{{cart.billTotal}}</span></div>
+        </div>
+      </div>
     </div>
+
+    <div class="second-half">
+      <div class="receipt">
+        <div class="tbl-header">
+          <table border="0">
+            <thead>
+              <tr> 
+                <th>Name</th>
+                <th>Qty</th>
+                <th>Price (₹)</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr v-for="(item, $itemIndex) in cart.cart" :key="$itemIndex">
+                <td>{{item.name}}</td>
+                <td>{{item.qty}}</td>
+                <td>{{item.price*item.qty}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr>
+                <td></td>
+                <td>Tax</td>
+                <td>{{tax}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr>
+                <td></td>
+                <td>Total</td>
+                <td>{{cart.billTotal + tax}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <button :class="{disabled: !cart.billTotal}" :disabled=!cart.billTotal @click="orderItems">Order Now</button>
+    </div>
+
     <div v-if="!cart.billTotal">
       <p>Your cart is empty</p>
       <p>Go back to the menu and add some food</p>
     </div>
-    <div v-if="cart.billTotal>0" class="bill-total">Total: {{cart.billTotal}}</div>
-    <div class="link" v-if="cart.billTotal>0">
-      <router-link class="link" to="/menu">Order more food</router-link>
-    </div>
-    <button :class="{disabled: !cart.billTotal}" :disabled=!cart.billTotal @click="orderItems">Order Now</button>
   </div>
 </template>
 
@@ -31,17 +93,28 @@
 import { mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      tax: 20
+    }
+  },
   mounted() {
     this.calcBillTotal()
   },
   methods: {
-    calcBillTotal() {
+    calcBillTotal () {
       this.$store.dispatch('cart/calcBillTotal', null, { root: true })
     },
-    deleteItems(item) {
+    deleteItems (item) {
       this.$store.dispatch('cart/removeFromCart', item, { root: true })
     },
-    orderItems() {
+    incrementQty (item) {
+      this.$store.dispatch('cart/increment', item, { root: true })
+    },
+    decrementQty (item) {
+      this.$store.dispatch('cart/decrement', item, { root: true })
+    },
+    orderItems () {
       this.$router.replace('order')
     }
   },
@@ -53,60 +126,179 @@ export default {
 
 <style scoped>
 
+h2 {
+  text-align: left;
+}
+
 .cart-page {
   font-family: 'Montserrat', sans-serif;
+  display: flex;
+}
+
+.first-half {
+  flex: 2;
+  padding: 0 4%;
+}
+
+.list {
+  height: 60vh;
+  overflow-x: auto;
+  /* border: 2px solid #f1f1f1; */
+  /* border-radius: 1em; */
+  /* -ms-overflow-style: none; */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+/* .list::-webkit-scrollbar {
+  display: none;
+} */
+
+.second-half {
+  flex: 1;
+  padding-top: 2em;
+  background: #f1f1f1;
+  height: calc(85vh - 2em);
+  margin: 1em;
+}
+
+table {
+  width:100%;
+  table-layout: fixed;
+}
+
+.tbl-content {
+  overflow-x: auto;
+  margin-top: 0px;
+  margin-bottom: 1em;
+}
+
+th {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 15px;
+  text-align: left;
+  vertical-align:middle;
+  font-weight: 300;
+  font-size: 12px;
+  color: #000;
+  border-bottom: solid 1px rgba(255,255,255,0.1);
 }
 
 .cart {
   margin-top: 50px;
-  margin-left: 50%;
-  transform: translateX(-50%);
 }
 
-.cart ul li {
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
   list-style-type: none;
 }
 
 .cart-items {
-  width: 700px;
   display: flex;
   justify-content: space-between;
-  margin: 20px 0;
+  align-items: center;
+  margin: 2em 0;
 }
 
-.cart-items .item-name,.item-price {
-  font-size: 1.1em;
-  font-weight: 400;
+.item-desc {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 2;
 }
 
-.cart-items .item-price img {
-  width: 15px;
-  height: auto;
+.item-name {
+  margin-left: 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
+
+.item-price {
+  margin-left: 20px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+}
+
+.item-qty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.item-qty input {
+  width: 40px;
+  border: 2px solid #f1f1f1;
+  margin: 0 10px;
+  text-align: center;
+  font-weight: 600;
+  color: #515151;
+}
+
+.item-qty span {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #515151;
+  cursor: pointer;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+}
+
 
 .bill-total {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.2em;
+  color: #a1a1a1;
+}
+
+.bill-total span {
+  color: #2c3e50;
   font-size: 1.2em;
 }
 
 .delete-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* width: 30px;
-  height: 22px; */
-  cursor: pointer; 
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+  flex: 1;
 }
 
-.delete-item i {
-  font-size: 20px;
-  color: #C4302B;
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-right: 0;
+  margin-top: 2em;
 }
 
 .link {
   font-size: 1.02em;
+  font-weight: 600;
+}
+
+.link span {
+  color: #515151;
+  margin-right: 6px;
 }
 
 a:hover {
@@ -137,8 +329,5 @@ button:hover {
   background: rgba(196, 48, 43, 0.5);
 }
 
-hr {
-  width: 20%;
-}
 
 </style>
