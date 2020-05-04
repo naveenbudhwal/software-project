@@ -1,28 +1,8 @@
 <template>
   <div id="app">
     <NotificationContainer/> 
-    <!-- <img src="./assets/logo.png" alt="Vue logo"> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-      <router-link to="/" class="navbar-brand">RMS</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <router-link to="/">Home <span class="sr-only">(current)</span> </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/menu">Menu </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/login">Login </router-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <transition name="fade-in" mode="out-in">
+    <NavBar/>
+    <transition name="fade-in" mode="out-in" appear>
       <router-view/>
     </transition>
   </div>
@@ -30,11 +10,13 @@
 
 <script>
 import NotificationContainer from '@/components/NotificationContainer.vue';
+import NavBar from '@/components/NavBar.vue'
 
 export default {
   name: 'app',
   components: {
-    NotificationContainer
+    NotificationContainer,
+    NavBar
   }
 }
 </script>

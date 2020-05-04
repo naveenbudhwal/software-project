@@ -2,12 +2,7 @@
   <div class="menu">
     <h1>Menu</h1>
     <div class="cart">
-      <router-link to="/cart">
-        <i class="fas fa-shopping-cart"></i>
-        <counter-badge :count="cartLength"></counter-badge> 
-      </router-link>
     </div>
-
     <hr class="minimal">
     <div class="menu-items">
       <ul>
@@ -95,22 +90,6 @@ export default {
   width: 13px;
   height: auto;
 }
-
-.cart {
-  position: fixed;
-  right: 5%;
-  top: 15%;
-}
-
-.cart i {
-  color: #4c4f4f;
-  font-size: 40px;
-}
-
-/* .cart img {
-  width: 60px;
-  height: auto;
-} */
 
 button {
   padding: 10px 15px;
