@@ -1,101 +1,58 @@
 <template>
   <div class="cart-page">
-    <div class="first-half">
-      <h2><i class="fas fa-shopping-cart"></i> Cart</h2>
-      <div class="cart">
-        <ul class="list">
-          <li v-for="(item,index) in cart.cart" :key="index">
-            <div class="cart-items">
-              <div class="item-desc">
-                <div class="item-image"><img :src="item.image" alt="Food"></div>
-                <div class="item-name">{{item.name}}</div>
-              </div>
-              <div class="item-qty">
-                <span @click="decrementQty(item)">-</span>
-                <input type="text" :value="item.qty">
-                <span @click="incrementQty(item)">+</span>
-              </div>
-              <div class="item-price">₹ {{item.price}}</div> 
-              <div class="delete-item" @click="deleteItems(item)">
-                <!-- <i class="fas fa-trash-alt"></i> -->
-                <span>x</span>
-              </div>
-            </div>
-          </li>
-        </ul>
-        <div class="row">
-          <div class="link" v-if="cart.billTotal>0">
-            <router-link to="/menu"><span><i class="fas fa-long-arrow-alt-left"></i></span> Order more</router-link>
-          </div>
-          <div v-if="cart.billTotal>0" class="bill-total">SubTotal: <span>₹{{cart.billTotal}}</span></div>
-        </div>
-      </div>
-    </div>
+    <div class="row">
+      <h2><i class="fas fa-shopping-cart"></i> Cart <span class="item-count">({{cartLength}} items)</span></h2>
 
-    <div class="second-half">
-      <div class="receipt">
-        <div class="tbl-header">
-          <table border="0">
-            <thead>
-              <tr> 
-                <th>Name</th>
-                <th>Qty</th>
-                <th>Price (₹)</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div class="tbl-content">
-          <table cellpadding="0" cellspacing="0" border="0">
-            <tbody>
-              <tr v-for="(item, $itemIndex) in cart.cart" :key="$itemIndex">
-                <td>{{item.name}}</td>
-                <td>{{item.qty}}</td>
-                <td>{{item.price*item.qty}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="tbl-content">
-          <table cellpadding="0" cellspacing="0" border="0">
-            <tbody>
-              <tr>
-                <td></td>
-                <td>Tax</td>
-                <td>{{tax}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="tbl-content">
-          <table cellpadding="0" cellspacing="0" border="0">
-            <tbody>
-              <tr>
-                <td></td>
-                <td>Total</td>
-                <td>{{cart.billTotal + tax}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
       <button :class="{disabled: !cart.billTotal}" :disabled=!cart.billTotal @click="orderItems">Order Now</button>
     </div>
+    <div class="cart">
+      <ul class="list">
+        <li v-for="(item,index) in cart.cart" :key="index">
+          <div class="cart-items">
+            <div class="item-desc">
+              <div class="item-image"><img :src="item.image" alt="Food"></div>
+              <div class="item-name">{{item.name}}</div>
+            </div>
+            <div class="item-qty">
+              <span @click="decrementQty(item)">-</span>
+              <input 
+                type="text" 
+                :value="item.qty" 
+                @change="updateQty($event, item)"
+              >
+              <span @click="incrementQty(item)">+</span>
+            </div>
+            <div class="item-price">₹ {{item.price}}</div> 
+            <div class="delete-item" @click="deleteItems(item)">
+              <span>x</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="row">
+        <div class="link" v-if="cart.billTotal>0">
+          <router-link to="/menu"><span><i class="fas fa-long-arrow-alt-left"></i></span> Order more</router-link>
+        </div>
+        <div v-if="cart.billTotal>0" class="bill-total">SubTotal: <span>₹{{cart.billTotal}}</span></div>
+      </div>
+    </div>
 
-    <div v-if="!cart.billTotal">
+    <div v-if="!cart.billTotal" class="empty">
       <p>Your cart is empty</p>
       <p>Go back to the menu and add some food</p>
+      <router-link to="/menu"><span><i class="fas fa-long-arrow-alt-left"></i></span> Order more</router-link>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
-      tax: 20
+      tax: 20,
+      qty: 0
     }
   },
   mounted() {
@@ -108,6 +65,9 @@ export default {
     deleteItems (item) {
       this.$store.dispatch('cart/removeFromCart', item, { root: true })
     },
+    updateQty (e, item) {
+      this.$store.dispatch('cart/update', { item, quantity: e.target.value }, { root: true })
+    },
     incrementQty (item) {
       this.$store.dispatch('cart/increment', item, { root: true })
     },
@@ -119,80 +79,37 @@ export default {
     }
   },
   computed: {
-    ...mapState(['cart'])
+    ...mapState(['cart']),
+    ...mapGetters('cart', ['cartLength'])
   }
 }
 </script>
 
 <style scoped>
 
+a {
+  color: #2c3e50;
+}
+
 h2 {
-  text-align: left;
+  font-weight: 600;
 }
 
 .cart-page {
   font-family: 'Montserrat', sans-serif;
   display: flex;
+  flex-direction: column;
+  height: 85vh;
+  margin: 0 10%;
 }
 
-.first-half {
-  flex: 2;
-  padding: 0 4%;
+.item-count {
+  font-size: 1.2rem;
 }
 
 .list {
   height: 60vh;
   overflow-x: auto;
-  /* border: 2px solid #f1f1f1; */
-  /* border-radius: 1em; */
-  /* -ms-overflow-style: none; */
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-/* .list::-webkit-scrollbar {
-  display: none;
-} */
-
-.second-half {
-  flex: 1;
-  padding-top: 2em;
-  background: #f1f1f1;
-  height: calc(85vh - 2em);
-  margin: 1em;
-}
-
-table {
-  width:100%;
-  table-layout: fixed;
-}
-
-.tbl-content {
-  overflow-x: auto;
-  margin-top: 0px;
-  margin-bottom: 1em;
-}
-
-th {
-  padding: 20px 15px;
-  text-align: left;
-  font-weight: 500;
-  font-size: 12px;
-  color: #000;
-  text-transform: uppercase;
-}
-
-td {
-  padding: 15px;
-  text-align: left;
-  vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #000;
-  border-bottom: solid 1px rgba(255,255,255,0.1);
-}
-
-.cart {
-  margin-top: 50px;
 }
 
 ul {
@@ -263,6 +180,26 @@ ul li {
   height: 100%;
 }
 
+.empty {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(43, 112, 220, 0.2);
+  border-radius: 1em;
+  padding: 2em;
+}
+
+.empty a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2b70dc;
+}
+
+.empty span {
+  color: #2c3e50;
+}
 
 .bill-total {
   font-weight: 600;
@@ -286,9 +223,8 @@ ul li {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 12.5vh;
   width: 100%;
-  margin-right: 0;
-  margin-top: 2em;
 }
 
 .link {
@@ -296,9 +232,21 @@ ul li {
   font-weight: 600;
 }
 
+.link a {
+  color: #2b70dc;
+}
+
 .link span {
-  color: #515151;
-  margin-right: 6px;
+  color: #2c3e50;
+  margin-right: 0.3em;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.big {
+  font-size: 1.1em;
 }
 
 a:hover {
@@ -312,7 +260,8 @@ button {
   border: none;
   box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
   padding: 10px 20px;
-  border-radius: 24px; 
+  border-radius: 24px;
+  font-weight: 600; 
   transition: background 0.2s ease-in-out;
 }
 

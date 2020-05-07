@@ -7,11 +7,17 @@ export const state = {
 
 export const mutations = {
   ADD_TO_CART(state, payload) {
-    state.cart.push(payload)
+    // Check if item already in cart, then update quantity
+    const index = state.cart.indexOf(payload)
+    if (index == -1)
+      state.cart.push(payload)
+    else 
+      state.cart[index].qty += 1
   },
-  REMOVE_FROM_CART(state, payload) {
-    state.billTotal = state.billTotal - payload.price
-    let indexToDelete = state.cart.indexOf(payload);
+  REMOVE_FROM_CART(state, item) {
+    state.billTotal = state.billTotal - item.price*item.qty
+    item.qty = 1
+    let indexToDelete = state.cart.indexOf(item);
     state.cart.splice(indexToDelete, 1);
   },
   SET_BILL_TOTAL(state, payload) {
@@ -37,6 +43,25 @@ export const mutations = {
         break
       }
     }
+  },
+  UPDATE_QTY(state, { item, quantity }) {
+    if(quantity >= 1) {
+      for(const i of state.cart) {
+        if(i.name === item.name && i.qty >= 1) {
+          if(i.qty < quantity) {
+            const rem = quantity - i.qty
+            i.qty = quantity
+            state.billTotal = Number(state.billTotal) + Number(item.price)*rem
+            break
+          } else {
+            const rem = i.qty - quantity
+            i.qty = quantity
+            state.billTotal = Number(state.billTotal) - Number(item.price)*rem
+            break
+          }
+        }
+      }
+    }
   }
 }
 
@@ -49,13 +74,13 @@ export const actions = {
     dispatch('notification/add', notification, { root: true })
     commit('ADD_TO_CART', payload)
   },
-  removeFromCart({ commit, dispatch }, payload) {
+  removeFromCart({ commit, dispatch }, item) {
     const notification = {
       type: 'info',
       message: 'Item removed from cart'
     }
     dispatch('notification/add', notification, { root: true })
-    commit('REMOVE_FROM_CART', payload);
+    commit('REMOVE_FROM_CART', item);
   },
   calcBillTotal({ commit, state }) {
     let billTotal = 0
@@ -69,6 +94,9 @@ export const actions = {
   },
   decrement({ commit }, item) {
     commit('DECREMENT_QTY', item)
+  },
+  update({ commit }, { item, quantity }) {
+    commit('UPDATE_QTY', { item, quantity })
   },
   emptyCart({ commit }, payload) {
     commit('EMPTY_CART', payload)

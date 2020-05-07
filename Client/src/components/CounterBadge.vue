@@ -14,13 +14,13 @@ export default {
 <style>
 .badge {
   position: absolute;
-  top: -.5rem;
-  right: -1.3rem;
+  top: -0.6rem;
+  right: 0.4rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 20px;
   background-color: #42b983;
   color: #FFF;
