@@ -13,9 +13,9 @@
         <li class="nav-item">
           <router-link to="/menu">Menu</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item cart">
           <router-link to="/cart">
-            <i class="fas fa-shopping-cart"></i> Cart
+            <i class="fas fa-shopping-cart"></i>
             <counter-badge :count="cartLength"></counter-badge>
           </router-link>
         </li>
@@ -63,6 +63,10 @@ export default {
 </script>
 
 <style scoped>
+
+.cart {
+  position: relative;
+}
 
 #nav-icon1 {
   display: none;
@@ -172,7 +176,7 @@ ul, li {
   width: 30%;
 }
 
-.nav-links a {
+a {
   text-decoration: none;
   color: rgb(73, 80, 87);
 }
