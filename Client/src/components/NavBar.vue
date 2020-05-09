@@ -173,7 +173,7 @@ ul, li {
   display: flex;
   justify-content: space-around;
   margin-right: 30px;
-  width: 30%;
+  width: 20%;
 }
 
 a {
