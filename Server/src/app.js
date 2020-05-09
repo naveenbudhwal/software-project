@@ -76,74 +76,70 @@ app.post('/deleteMenuItem', (req, res) => {
   })
 })
 
-app.post('/addToCart', (req, res) => {
-  const collection = client.db('Restaurant').collection('cart')
-  var itemName = req.body.item.name
-  var itemPrice = req.body.item.price
-  var itemImage = req.body.item.image
-  collection.insertOne({name: itemName, price: itemPrice, image: itemImage}, function(err, results) {
-    if(err) {
-      console.log('Error adding item to cart' + err)
-      res.send('')
-      return
-    }
-    console.log('Item added successfully!')
-    res.send(results.ops[0])
-  })
-})
+// app.post('/addToCart', (req, res) => {
+//   const collection = client.db('Restaurant').collection('cart')
+//   var itemName = req.body.item.name
+//   var itemPrice = req.body.item.price
+//   var itemImage = req.body.item.image
+//   collection.insertOne({name: itemName, price: itemPrice, image: itemImage}, function(err, results) {
+//     if(err) {
+//       console.log('Error adding item to cart' + err)
+//       res.send('')
+//       return
+//     }
+//     res.send(results.ops[0])
+//   })
+// })
 
-app.get('/cartItems', (req, res) => {
-  const collection = client.db('Restaurant').collection('cart')
-  collection.find().toArray(function(err, results) {
-    if(err) {
-      console.log('Error retreiving cart items from DB' + err)
-      res.send([])
-      return
-    }
-    res.send(results)
-  })
-})
+// app.get('/cartItems', (req, res) => {
+//   const collection = client.db('Restaurant').collection('cart')
+//   collection.find().toArray(function(err, results) {
+//     if(err) {
+//       console.log('Error retreiving cart items from DB' + err)
+//       res.send([])
+//       return
+//     }
+//     res.send(results)
+//   })
+// })
 
-app.post('/deleteCartItem', (req, res) => {
-  const collection = client.db('Restaurant').collection('cart')
-  collection.removeOne({name: req.body.item.name}, function(err, results) {
-    if(err) {
-      console.log('Error deleting cart items' + err) 
-      res.send('')
-      return
-    }
-    console.log('Item removed from cart')
-    res.send() // Return
-  })
-})
+// app.post('/deleteCartItem', (req, res) => {
+//   const collection = client.db('Restaurant').collection('cart')
+//   collection.removeOne({name: req.body.item.name}, function(err, results) {
+//     if(err) {
+//       console.log('Error deleting cart items' + err) 
+//       res.send('')
+//       return
+//     }
+//     res.send() // Return
+//   })
+// })
 
 app.post('/addOrder', (req, res) => {
   const collection = client.db('Restaurant').collection('orders')
   var items = req.body.order
-  var customerName = req.body.info.customerName
-  var customerMobile = req.body.info.customerMobileNo
-  var customerEmail = req.body.info.customerEmail
-  var feedback = req.body.info.feedback
+  // var customerName = req.body.info.customerName
+  // var customerMobile = req.body.info.customerMobileNo
+  // var customerEmail = req.body.info.customerEmail
+  // var feedback = req.body.info.feedback
   var date = req.body.info.date
   var time = req.body.info.time
-  collection.insertOne({order: items, customerName: customerName, customerMobile: customerMobile, customerEmail: customerEmail, feedback: feedback, date: date, time: time}, function(err, results) {
+  collection.insertOne({order: items, date: date, time: time}, function(err, results) {
     if(err) {
       console.log('Error logging order to DB' + err)
       res.send('')
       return
     }
-    console.log('Order logged to DB successfully!')
     res.send(results.ops[0])
   })
-  const collection1 = client.db('Restaurant').collection('cart')
-  collection1.deleteMany({}, function(err, results) {
-    if(err) {
-      console.log('Error emptying cart' + err)
-      res.send('')
-      return
-    }
-    console.log('Cart emptied successfully!!')
-  })
+  // const collection1 = client.db('Restaurant').collection('cart')
+  // collection1.deleteMany({}, function(err, results) {
+  //   if(err) {
+  //     console.log('Error emptying cart' + err)
+  //     res.send('')
+  //     return
+  //   }
+  // })
 })
 
 app.get('/orderItems', (req, res) => {

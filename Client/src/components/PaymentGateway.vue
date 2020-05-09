@@ -1,180 +1,178 @@
 <template>
-  <div class="payment-gateway">
-    <div class="row">
-      <div class="col-75">
-        <div class="container">
-          <form>
-            <div class="row">
-              <div class="col-50">
-                <h3>Billing Address</h3>
-                <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-                <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
-                <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                <input type="text" id="email" name="email" placeholder="john@example.com">
-                <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-                <input type="text" id="adr" name="address" placeholder="542 W. 15th Street">
-                <label for="city"><i class="fa fa-institution"></i> City</label>
-                <input type="text" id="city" name="city" placeholder="New York">
-
-                <div class="row">
-                  <div class="col-50">
-                    <label for="state">State</label>
-                    <input type="text" id="state" name="state" placeholder="NY">
-                  </div>
-                  <div class="col-50">
-                    <label for="zip">Zip</label>
-                    <input type="text" id="zip" name="zip" placeholder="10001">
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-50">
-                <h3>Payment</h3>
-                <label for="fname">Accepted Cards</label>
-                <div class="icon-container">
-                  <i class="fa fa-cc-visa" style="color:navy;"></i>
-                  <i class="fa fa-cc-amex" style="color:blue;"></i>
-                  <i class="fa fa-cc-mastercard" style="color:red;"></i>
-                  <i class="fa fa-cc-discover" style="color:orange;"></i>
-                </div>
-                <label for="cname">Name on Card</label>
-                <input type="text" id="cname" name="cardname" placeholder="John More Doe">
-                <label for="ccnum">Credit card number</label>
-                <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
-                <label for="expmonth">Exp Month</label>
-                <input type="text" id="expmonth" name="expmonth" placeholder="September">
-
-                <div class="row">
-                  <div class="col-50">
-                    <label for="expyear">Exp Year</label>
-                    <input type="text" id="expyear" name="expyear" placeholder="2018">
-                  </div>
-                  <div class="col-50">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" placeholder="352">
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <label>
-              <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
-            </label>
-            <input type="submit" value="Continue to checkout" class="btn">
-          </form>
-        </div>
+  <div class="payment">
+    <div class="debit-card">
+      <div class="card-name">
+        <p>Name on card:</p>
+        <input type="text">
       </div>
-
-      <div class="col-25">
-        <div class="container">
-          <h4>Cart
-            <span class="price" style="color:black">
-              <i class="fa fa-shopping-cart"></i>
-              <b>4</b>
-            </span>
-          </h4>
-          <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-          <p><a href="#">Product 2</a> <span class="price">$5</span></p>
-          <p><a href="#">Product 3</a> <span class="price">$8</span></p>
-          <p><a href="#">Product 4</a> <span class="price">$2</span></p>
-          <hr>
-          <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
+      <div class="card-num">
+        <p>Card Number:</p>
+        <input type="text">
+      </div>
+      <div class="expiry">
+        <p>Expiry Date:</p>
+        <input type="text" placeholder="MM"> /
+        <input type="text" placeholder="YY">
+      </div>
+      <div class="cvv-code">
+        <p>CVV:</p>
+        <input type="password">
+      </div>
+      <div class="submit-btn">
+        <button>Pay</button>
+      </div>
+    </div>
+    <div class="spacer">
+      <span>OR PAY USING</span>
+    </div>
+    <div class="row">
+      <div class="payment-merchant">
+        <div class="merchant-logo">
+          <img src="@/assets/google_pay.png" alt="">
         </div>
+        <p>Google Pay</p>
+      </div>
+      <div class="payment-merchant">
+        <div class="merchant-logo">
+          <img src="@/assets/paytm.png" alt="">
+        </div>
+        <p>Paytm</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'payment'
-}
+  export default {
+    name: 'payment-gateway'
+  }
 </script>
 
-<style>
-.row {
-  display: -ms-flexbox; /* IE10 */
+<style scoped>
+
+.debit-card {
   display: flex;
-  -ms-flex-wrap: wrap; /* IE10 */
-  flex-wrap: wrap;
-  margin: 0 -16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 50%;
+  margin: auto;
 }
 
-.col-25 {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
+.debit-card div {
+  margin: 0.5em 0;
 }
 
-.col-50 {
-  -ms-flex: 50%; /* IE10 */
-  flex: 50%;
+.debit-card p {
+  text-align: left;
 }
 
-.col-75 {
-  -ms-flex: 75%; /* IE10 */
-  flex: 75%;
-}
-
-.col-25,
-.col-50,
-.col-75 {
-  padding: 0 16px;
-}
-
-.container {
-  background-color: #f2f2f2;
-  padding: 5px 20px 15px 20px;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-}
-
-input[type=text] {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-label {
-  margin-bottom: 10px;
-  display: block;
-}
-
-.icon-container {
-  margin-bottom: 20px;
-  padding: 7px 0;
-  font-size: 24px;
-}
-
-.btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px;
-  margin: 10px 0;
+input {
   border: none;
-  width: 100%;
-  border-radius: 3px;
+  background: #e1e1e1;
+  border-radius: 0.3em;
+  margin: 0.3em 0;
+  padding: 0.5em 0.8em;
+  outline: none;
+  width: 20rem;
+  transition: all 0.1s ease-in-out;
+}
+
+input:focus {
+  border: 2px solid #2b70dc;
+}
+
+.card-num span {
+  text-align: left;
+}
+
+.expiry input {
+  width: 4em;
+}
+
+.cvv-code input {
+  width: 4em;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.payment-merchant {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1.7em;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
+  width: 15em;
+  border-radius: 0.7em;
+  margin: 1em 0.5em;
   cursor: pointer;
-  font-size: 17px;
+  transition: all 0.18s ease-in-out;
 }
 
-.btn:hover {
-  background-color: #45a049;
+.payment-merchant:hover {
+  transform: translateY(-5px);
 }
 
-span.price {
-  float: right;
-  color: grey;
+.merchant-logo {
+  width: 3em;
+  height: auto;
+  margin: 0 1em;
 }
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
-@media (max-width: 800px) {
-  .row {
-    flex-direction: column-reverse;
-  }
-  .col-25 {
-    margin-bottom: 20px;
-  }
+.payment-merchant img {
+  width: 100%;
+  height: 100%;
 }
+
+.submit-btn button {
+  border: none;
+  background: #2b70dc;
+  color: #fff;
+  padding: 0.5em 1em;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-radius: 0.3em;
+  transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.submit-btn button:hover {
+  transform: translate(-0.7px, -0.7px);
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.spacer {
+  width: 20%;
+  margin: auto;
+  margin: 0.5em auto;
+}
+
+.spacer span {
+  overflow: hidden;
+  text-align: center;
+}
+
+.spacer span:before,
+.spacer span:after {
+  background-color: #000;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.spacer span:before {
+  right: 1em;
+  margin-left: -50%;
+}
+
+.spacer span:after {
+  left: 1em;
+  margin-right: -50%;
+}
+
 </style>

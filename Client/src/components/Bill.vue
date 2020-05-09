@@ -16,7 +16,7 @@
     <hr>
     <div class="total">
       <div class="bill-sub-total">Sub Total</div>
-      <div class="bill-sub-total"><img src="../assets/rupee.png" alt="rupee sign">{{total}}</div>
+      <div class="bill-sub-total">₹ {{total}}</div>
     </div>
     <div class="total">
       <div class="tax">Tax</div>
@@ -24,7 +24,7 @@
     </div>
     <div class="total">
       <div class="bill-total">Total (Incl All Taxes)</div>
-      <div class="bill-sub-total"><img src="../assets/rupee.png" alt="rupee sign">{{billTotal}}</div>
+      <div class="bill-sub-total">₹ {{billTotal}}</div>
     </div>
   </div>
 </template>
@@ -86,19 +86,9 @@ ul,li {
   margin: 10px 0;
 }
 
-.bill-items .item-price img {
-  width: 15px;
-  height: auto;
-}
-
 .total {
   display: flex;
   justify-content: space-between;
-}
-
-img {
-  width: 15px;
-  height: auto;
 }
 
 .bill-sub-total {

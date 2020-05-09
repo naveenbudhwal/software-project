@@ -75,7 +75,7 @@ export default {
       this.$store.dispatch('cart/decrement', item, { root: true })
     },
     orderItems () {
-      this.$router.replace('order')
+      this.$router.push('payment')
     }
   },
   computed: {
