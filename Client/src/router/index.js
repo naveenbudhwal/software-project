@@ -11,6 +11,7 @@ import AddItems from '../views/AddItems.vue'
 import Order from '../views/Order.vue'
 import Payment from '../views/Payment.vue'
 import Report from '../views/Report.vue'
+import SignUp from '../views/SignUp.vue'
 
 
 Vue.use(VueRouter)
@@ -55,6 +56,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/sign-up',
+    name: 'sign-up',
+    component: SignUp
   },
   {
     path: '/admin',
