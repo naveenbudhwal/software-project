@@ -208,7 +208,7 @@ app.post('/register', (req, res) => {
   }
 
   const collection = client.db('Restaurant').collection('user')
-  collection.insertOne({ name: user.name, email: user.email, password: user.password }, function(err, results) {
+  collection.insertOne({ name: user.name, email: user.email, password: user.password, role: 'user' }, function(err, results) {
     if(err) {
       res.send('')
       return 
@@ -239,7 +239,8 @@ app.post('/login', (req, res) => {
       res.json({
         token,
         email: result.email,
-        name: result.name
+        name: result.name,
+        role: result.role
       })
     } else {
       res.status(401).json({ error: 'Invalid Username/Password. Please try again.'})

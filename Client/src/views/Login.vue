@@ -6,7 +6,8 @@
 
 <script>
 import LoginForm from '@/components/LoginForm.vue';
-import firebase from 'firebase'
+// import firebase from 'firebase'
+import { mapState } from 'vuex';
 
   export default {
     name: 'Login',
@@ -22,7 +23,11 @@ import firebase from 'firebase'
           }, 
           { root: true }
         ).then(() => {
-          this.$router.push({ name: 'user' })
+          if(this.auth.user.role === 'user') {
+            this.$router.push({ name: 'user' })
+          } else {
+            this.$router.push({ name: 'admin' })
+          }
           const notification = {
             type: 'success',
             message: 'Successfully Logged In!!',
@@ -47,7 +52,8 @@ import firebase from 'firebase'
         //   dispatch('notification/add', notification, { root: true })
         // })
       }
-    }
+    },
+    computed: mapState(['auth'])
   }
 </script>
 

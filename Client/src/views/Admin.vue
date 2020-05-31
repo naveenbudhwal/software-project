@@ -1,9 +1,8 @@
 <template>
   <div>
-    <h1><i class="fas fa-users-cog"></i> Welcome back Craig</h1>
+    <h1><i class="fas fa-users-cog"></i> Welcome back {{ auth.user.name }}</h1>
     <hr class="heading-hr">
     <router-link to="/admin/add-menu-items">
-      <!-- <button class="add-menu-items">Add items to menu</button> -->
       <i class="fas fa-plus-circle add-menu-items"></i>
     </router-link>
     <div class="heading">
@@ -30,8 +29,6 @@
     <router-link to="/admin/report">
       <button class="report">Generate Sales report</button>
     </router-link>
-    <br>
-    <button class="logout" @click="logout">Logout</button>
   </div>
 </template>
 
@@ -50,15 +47,11 @@ export default {
     },
     deleteItems(item) {
       this.$store.dispatch('menu/deleteItem', item, { root: true })
-    },
-    logout() {
-      firebase.auth().signOut().then(() => {
-        this.$router.push('login')
-      })
     }
   },
   computed: {
-    ...mapState(['menu'])
+    ...mapState(['menu']),
+    ...mapState(['auth'])
   }
 }
 </script>
@@ -143,18 +136,6 @@ i.add-menu-items {
 
 i.add-menu-items:hover {
   color: #009433;
-}
-
-.logout {
-  background: #d11a2a;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
-  padding: 10px 20px;
-  border-radius: 24px;
-}
-
-.logout:hover {
-  background: #AE0013;
 }
 
 .report {
