@@ -28,7 +28,11 @@ import { mapState } from 'vuex'
 
 export default {
   mounted () {
-    this.$store.dispatch('auth/getUserDetails', { root: true })
+    if(this.auth.user.role === 'admin') {
+      this.$router.replace('admin')
+    } else {
+      this.$store.dispatch('auth/getUserDetails', { root: true })
+    }
   },
   computed: mapState(['auth'])
 }
