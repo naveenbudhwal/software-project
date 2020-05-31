@@ -157,10 +157,10 @@ app.post('/addOrder', (req, res) => {
 })
 
 app.get('/orderItems', (req, res) => {
-  const collection = client.db('Restaurant').collection('orders')
+  const collection = client.db('Restaurant').collection('user')
   collection.find().toArray(function(err, results) {
     if(err) {
-      console.log('Error retreiving order items from DB' + err)
+      console.log('Error retreiving items from DB' + err)
       res.send([])
       return
     }
