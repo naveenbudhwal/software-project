@@ -2,14 +2,20 @@
   <div class="report-page">
     <h3><i class="fas fa-poll-h"></i> Sales Report</h3>
     <hr>
-    <section>
+    
+    <HorizontalCard 
+      v-for="(user, $userIndex) in users"
+      :key="$userIndex"
+      :user = user
+    />
+
+    <!-- <section>
       <h1>Fixed Table header</h1>
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Mobile</th>
               <th>Email</th>
               <th>Order</th>
               <th>Feedback</th>
@@ -22,25 +28,26 @@
       <div class="tbl-content">
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
-            <tr v-for="(item,$itemIndex) in orders" :key="$itemIndex">
-              <td>{{item.customerName}}</td>
-              <td>{{item.customerMobile}}</td>
-              <td>{{item.customerEmail}}</td>
-              <td>
+            <tr v-for="(user, $userIndex) in users" :key="$userIndex">
+              <td v-if="user.role != 'admin'">{{user.name}}</td>
+              <td v-if="user.role != 'admin'">{{user.email}}</td>
+              <td v-if="user.role != 'admin'">
                 <ul>
-                  <li v-for="(order,$orderIndex) in item.order" :key="$orderIndex"> 
-                    {{order.name}}
+                  <li v-for="(order, $orderIndex) in user.orders" :key="$orderIndex"> 
+                    <ul>
+                      <li v-for="(foodItem, $foodItemIndex) in order.foodItems" :key="$foodItemIndex">{{ foodItem.name }}</li>
+                    </ul>
                   </li>
                 </ul>
               </td>
-              <td>{{item.feedback}}</td>
-              <td>{{item.date}}</td>
-              <td>{{item.time}}</td>
+              <td v-if="user.role != 'admin'">{{user.feedback}}</td>
+              <td v-if="user.role != 'admin'">{{user.date}}</td>
+              <td v-if="user.role != 'admin'">{{user.time}}</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </section>
+    </section> -->
 
     <router-link to="/admin">
       <i class="fas fa-arrow-alt-circle-left go-back"></i>
@@ -50,12 +57,16 @@
 
 <script>
 import RestaurantServices from '../services/RestaurantAPI.js'
+import HorizontalCard from '@/components/HorizontalCard.vue';
 
 export default {
   name: 'report',
+  components: {
+    HorizontalCard,
+  },
   data() {
     return {
-      orders: []
+      users: []
     }
   },
   created() {
@@ -64,7 +75,8 @@ export default {
   methods: {
     async loadOrders() {
       const response = await RestaurantServices.loadOrderItems()
-      this.orders = response.data
+      this.users = response.data
+      // console.log(response.data)
     }
   }
 }

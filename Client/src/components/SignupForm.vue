@@ -207,7 +207,7 @@ input:focus {
   margin: 1.5em 0 0.5em 0;
   cursor: pointer;
   padding: 10px 10px;
-  border: 1.9px solid #005ee3;
+  border: none;
   border-radius: 0.35em;
   display: block;
   width: 100%;

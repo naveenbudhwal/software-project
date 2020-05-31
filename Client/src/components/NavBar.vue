@@ -7,10 +7,10 @@
         </router-link>
       </div>
       <ul class="nav-links">  
-        <li class="nav-item">
+        <li class="nav-item underline">
           <router-link to="/">Home</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item underline">
           <router-link to="/menu">Menu</router-link>
         </li>
         <li class="nav-item" v-if="loggedIn">
@@ -22,14 +22,14 @@
             <counter-badge :count="cartLength"></counter-badge>
           </router-link>
         </li>
-        <li class="nav-item signin-btn" v-if="!loggedIn">
-          <router-link to="/login">SignIn</router-link>
+        <li class="nav-item underline" v-if="!loggedIn">
+          <router-link to="/login" class="signin-btn">Login</router-link>
         </li>
         <li class="nav-item" v-if="!loggedIn">
-          <router-link to="/register" class="signup-btn">SignUp</router-link>
+          <router-link to="/register" class="signup-btn">Sign Up</router-link>
         </li>
         <li class="nav-item" v-if="loggedIn" @click="logout">
-          <a class="logout-btn">Logout</a>
+          <button class="logout-btn">Logout</button>
         </li>
       </ul>
       
@@ -103,16 +103,33 @@ export default {
   border-radius: 0.35em;
   padding: 0.4em;
   font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .signup-btn {
   border: none;
-  background: linear-gradient(to bottom, #d8000c, #ce0008, #c50005, #bb0002, #b20000);
-  color: #fff;
+  background: linear-gradient(to bottom, #0069ff, #0066f8, #0063f1, #0061ea, #005ee3);
+  color: #fff !important;
   font-weight: 600;
   border-radius: 0.35em;
-  padding: 0.4em;
+  padding: 0.5em;
   font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.signup-btn:hover {
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.4);
+}
+
+.signin-btn {
+  border: none;
+  color: #0069ff !important;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 
@@ -219,27 +236,57 @@ ul, li {
 
 .nav-links {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   margin-right: 3em;
-  width: 20%;
+  width: 30%;
 }
 
 a {
   text-decoration: none;
-  color: rgb(73, 80, 87);
+  color: #031B4E;
 }
 
+.nav-links a {
+  color: #031B4E;
+}
+
+.nav-links
+
 .nav-links a:hover {
-  color: #2b70dc;
+  color: #031B4E;
 }
 
 .nav-links li {
   list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-nav a.router-link-exact-active {
-  color: #2b70dc;
+.underline {
+  position: relative;
 }
+
+.underline:before {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 3px;
+  bottom: 0;
+  background-color: #2b70dc;
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.underline:hover:before {
+  visibility: visible;
+  transform: scaleX(1);
+}
+
+/* nav a.router-link-exact-active {
+  color: #2b70dc;
+} */
 
 @media only screen and (max-width: 1200px) {
   .nav-links {
