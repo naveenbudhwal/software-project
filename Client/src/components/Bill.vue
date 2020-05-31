@@ -2,6 +2,7 @@
   <div class="bill">
     <div class="total">
       <div class="item">Item</div>
+      <div class="qty">Qty</div>
       <div class="price">Total</div>
     </div>
     <hr>
@@ -9,6 +10,7 @@
       <li v-for="(item,index) in billItems" :key="index">
         <div class="bill-items">
           <div class="item-name">{{item.name}}</div> 
+          <div class="item-qty">{{item.qty}}</div> 
           <div class="item-price">{{item.price}}</div>
         </div>
       </li>
@@ -20,7 +22,7 @@
     </div>
     <div class="total">
       <div class="tax">Tax</div>
-      <div class="tax">{{tax}}</div>
+      <div>{{tax}}</div>
     </div>
     <div class="total">
       <div class="bill-total">Total (Incl All Taxes)</div>
@@ -36,10 +38,6 @@ export default {
     total: Number,
     billItems: Array,
     tax: Number
-  },
-  data() {
-    return {
-      cartItems: []    }
   },
   methods: {
     payBill() {
@@ -61,7 +59,7 @@ ul,li {
   margin: 0;
 }
 
-.item, .price {
+.item, .qty, .price {
   font-weight: 600;
 }
 
@@ -71,9 +69,9 @@ ul,li {
   margin-left: 50%;
   transform: translateX(-50%);
   font-weight: 400;
-  border: 2px solid #eeeeee;
-  padding: 20px;
-  border-radius: 20px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.1);
+  padding: 1.6em;
+  border-radius: 0.6em;
 }
 
 .bill ul li {
@@ -84,6 +82,20 @@ ul,li {
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
+}
+
+.item, .item-name {
+  flex: 2;
+  text-align: left;
+}
+
+.qty, .item-qty {
+  flex: 1;
+}
+
+.price, .item-price {
+  flex: 1;
+  text-align: right;
 }
 
 .total {

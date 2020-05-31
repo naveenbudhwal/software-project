@@ -11,7 +11,9 @@ import AddItems from '../views/AddItems.vue'
 import Order from '../views/Order.vue'
 import Payment from '../views/Payment.vue'
 import Report from '../views/Report.vue'
-import SignUp from '../views/SignUp.vue'
+import RegisterUser from '../views/RegisterUser.vue'
+import User from '../views/User.vue'
+import NotFound from '../views/NotFound.vue'
 
 
 Vue.use(VueRouter)
@@ -58,9 +60,17 @@ const routes = [
     component: Login
   },
   {
-    path: '/sign-up',
-    name: 'sign-up',
-    component: SignUp
+    path: '/register',
+    name: 'register',
+    component: RegisterUser
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: User,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/admin',
@@ -85,6 +95,16 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: NotFound,
+    props: true
+  },
+  {
+    path: '*',
+    redirect: {name: '404', params: {resource: 'page'}}
   }
 ]
 
@@ -94,13 +114,22 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+// router.beforeEach((to, from, next) => {
+//   const currentUser = firebase.auth().currentUser;
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  if(requiresAuth && !currentUser) next('login')
-  else if (!requiresAuth && currentUser) next('admin')
-  else next();
+//   if(requiresAuth && !currentUser) next('login')
+//   else if (!requiresAuth && currentUser) next('admin')
+//   else next();
+// })
+
+router.beforeEach((to, from , next) => {
+  const loggedIn = localStorage.getItem('user')
+
+  if(to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
+    next('/login')
+  }
+  next()
 })
 
 export default router

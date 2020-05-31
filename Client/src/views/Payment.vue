@@ -1,12 +1,11 @@
 <template>
   <div class="order-page">
     <div class="first-half">
-      <payment-gateway></payment-gateway>      
+      <payment-gateway @order-items="placeOrder"></payment-gateway>      
     </div>
     <div class="second-half">
-      <h1>Payment</h1>
       <bill :billItems="cart.cart" :total="cart.billTotal" :tax="tax"></bill>
-      <button class="pay-bill" @click="payBill">Place your order</button>
+      <!-- <button class="pay-bill" @click="payBill">Place your order</button> -->
     </div>
   </div>
 </template>
@@ -35,6 +34,26 @@ export default {
         time: currentTime
       }
       const response = await RestaurantServices.addOrderItems(this.cart.cart, info)
+      this.$store.dispatch('cart/emptyCart', null, { root: true })
+      this.$router.push('order')
+    },
+    async placeOrder() {
+      const notification = {
+        type: 'info',
+        message: 'Order Confirmed',
+        timeout: 3000
+      }
+      this.$store.dispatch('notification/add', notification, { root: true })
+      var d = new Date();
+      var currentDate = d.getDate() + "/" + (d.getMonth()+1)  + "/" + d.getFullYear()  
+      var currentTime = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+      const response = await RestaurantServices.addOrderItems({
+        foodItems: this.cart.cart, 
+        billTotal: this.cart.billTotal,
+        userName: this.$store.state.auth.user.name,
+        currentTime,
+        currentDate
+      })
       this.$store.dispatch('cart/emptyCart', null, { root: true })
       this.$router.push('order')
     }
@@ -75,7 +94,7 @@ h1 {
   font-size: 1rem;
   padding: 0.8em;
   border-radius: 0.4em;
-  transition: all 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: all 0.15s ease-in-out;
   text-transform: uppercase;
 }
 

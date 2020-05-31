@@ -13,11 +13,23 @@
         <li class="nav-item">
           <router-link to="/menu">Menu</router-link>
         </li>
-        <li class="nav-item cart">
+        <li class="nav-item" v-if="loggedIn">
+          <router-link to="/user"><i class="far fa-user"></i></router-link>
+        </li>
+        <li class="nav-item cart" v-if="loggedIn">
           <router-link to="/cart">
             <i class="fas fa-shopping-cart"></i>
             <counter-badge :count="cartLength"></counter-badge>
           </router-link>
+        </li>
+        <li class="nav-item signin-btn" v-if="!loggedIn">
+          <router-link to="/login">SignIn</router-link>
+        </li>
+        <li class="nav-item" v-if="!loggedIn">
+          <router-link to="/register" class="signup-btn">SignUp</router-link>
+        </li>
+        <li class="nav-item" v-if="loggedIn" @click="logout">
+          <a class="logout-btn">Logout</a>
         </li>
       </ul>
       
@@ -58,7 +70,22 @@ export default {
   components: {
     CounterBadge
   },
-  computed: mapGetters('cart', ['cartLength'])
+  computed: {
+    ...mapGetters('cart', ['cartLength']),
+    ...mapGetters('auth', ['loggedIn'])
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('auth/logout', { root: true }).then(() => {
+        const notification = {
+          type: 'success',
+          message: 'Successfully Logged Out',
+          timeout: 2000
+        }
+        this.$store.dispatch('notification/add', notification, { root: true })
+      })
+    }
+  }
 }
 </script>
 
@@ -67,6 +94,27 @@ export default {
 .cart {
   position: relative;
 }
+
+.logout-btn {
+  border: none;
+  background: linear-gradient(to bottom, #d8000c, #ce0008, #c50005, #bb0002, #b20000);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.35em;
+  padding: 0.4em;
+  font-size: 1rem;
+}
+
+.signup-btn {
+  border: none;
+  background: linear-gradient(to bottom, #d8000c, #ce0008, #c50005, #bb0002, #b20000);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.35em;
+  padding: 0.4em;
+  font-size: 1rem;
+}
+
 
 #nav-icon1 {
   display: none;
@@ -161,7 +209,7 @@ ul, li {
 }
 
 .logo {
-  margin-left: 30px;
+  margin-left: 3em;
 }
 
 .logo img {
@@ -172,7 +220,7 @@ ul, li {
 .nav-links {
   display: flex;
   justify-content: space-around;
-  margin-right: 30px;
+  margin-right: 3em;
   width: 20%;
 }
 

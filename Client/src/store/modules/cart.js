@@ -69,7 +69,8 @@ export const actions = {
   addToCart({ commit, dispatch }, payload) {
     const notification = {
       type: 'success',
-      message: 'Item added to cart'
+      message: 'Item added to cart',
+      timeout: 2000
     }
     dispatch('notification/add', notification, { root: true })
     commit('ADD_TO_CART', payload)
@@ -77,7 +78,8 @@ export const actions = {
   removeFromCart({ commit, dispatch }, item) {
     const notification = {
       type: 'info',
-      message: 'Item removed from cart'
+      message: 'Item removed from cart',
+      timeout: 2000
     }
     dispatch('notification/add', notification, { root: true })
     commit('REMOVE_FROM_CART', item);

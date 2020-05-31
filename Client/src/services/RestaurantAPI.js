@@ -14,13 +14,25 @@ export default {
       item: item
     })
   },
-  addOrderItems(order, info) {
+  addOrderItems({ foodItems, billTotal, userName, currentTime, currentDate }) {
     return API().post('addOrder', {
-      order: order,
-      info: info
+      foodItems,
+      billTotal,
+      userName,
+      currentTime,
+      currentDate
     })
   },
   loadOrderItems() {
     return API().get('orderItems')
+  },
+  register({ name, email, password }) {
+    return API().post('register', { name, email, password })
+  },
+  login({ email, password }) {
+    return API().post('login', { email, password })
+  },
+  getUserDetails({ userEmail }) {
+    return API().post('user', { userEmail })
   }
 }

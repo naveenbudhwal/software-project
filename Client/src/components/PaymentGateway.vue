@@ -1,26 +1,30 @@
 <template>
   <div class="payment">
     <div class="debit-card">
-      <div class="card-name">
-        <p>Name on card:</p>
-        <input type="text">
+      <label for="name">Name on card</label>
+      <input type="text" id="name">
+      
+      <label for="number">Card number</label>
+      <input @keyup="formatInput" v-model="cardNumber" type="text" id="number">
+      
+      <div class="row-1">
+        <div class="expiry">
+          <label for="exiry-info">Expiry Date</label>
+          <div class="expiry-info">
+            <input type="text" placeholder="MM"> <span>/</span>
+            <input type="text" placeholder="YY">
+          </div>
+        </div>
+        <div class="cvv">
+          <label for="cvv-code">CVV</label>
+          <div class="cvv-code">
+            <input type="password">
+          </div>
+        </div>
       </div>
-      <div class="card-num">
-        <p>Card Number:</p>
-        <input type="text">
-      </div>
-      <div class="expiry">
-        <p>Expiry Date:</p>
-        <input type="text" placeholder="MM"> /
-        <input type="text" placeholder="YY">
-      </div>
-      <div class="cvv-code">
-        <p>CVV:</p>
-        <input type="password">
-      </div>
-      <div class="submit-btn">
-        <button>Pay</button>
-      </div>
+      
+      
+      <button class="submit-btn" @click="$emit('order-items')">Pay</button>
     </div>
     <div class="spacer">
       <span>OR PAY USING</span>
@@ -44,7 +48,20 @@
 
 <script>
   export default {
-    name: 'payment-gateway'
+    name: 'payment-gateway',
+    data() {
+      return {
+        cardNumber: null
+      }
+    },
+    methods: {
+      formatInput () {
+        // Remove dash (-) if mistakenly entered.
+        this.cardNumber = this.cardNumber.split('-').join('');    
+        if(this.cardNumber.length > 0)
+          this.cardNumber = this.cardNumber.match(/.{1,4}/g).join('-');
+      }
+    }
   }
 </script>
 
@@ -59,39 +76,60 @@
   margin: auto;
 }
 
-.debit-card div {
-  margin: 0.5em 0;
-}
-
-.debit-card p {
+label {
+  display: flex;
   text-align: left;
+  margin: 1em 0 0.3em 0;
+  color: #464555;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 input {
-  border: none;
-  background: #e1e1e1;
-  border-radius: 0.3em;
-  margin: 0.3em 0;
-  padding: 0.5em 0.8em;
+  border: 1.9px solid #D1D1D1;
+  border-radius: 0.35em;
+  padding: 0.8em;
   outline: none;
   width: 20rem;
   transition: all 0.1s ease-in-out;
+  width: 100%;
 }
 
 input:focus {
-  border: 2px solid #2b70dc;
+  border: 1.9px solid #0069FF;
+  box-shadow: 0 0 9.5px #0069FF99;
+}
+
+.row-1 {
+  width: 100%;
+  display: flex;
+}
+
+.expiry {
+  display: flex;
+  flex-direction: column;
+}
+
+.expiry-info input {
+  width: 70px;
+}
+
+.expiry-info span {
+  margin: 0 0.5em;
+}
+
+.cvv {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2em;
+}
+
+.cvv-code input {
+  width: 70px;
 }
 
 .card-num span {
   text-align: left;
-}
-
-.expiry input {
-  width: 4em;
-}
-
-.cvv-code input {
-  width: 4em;
 }
 
 .row {
@@ -127,26 +165,27 @@ input:focus {
   height: 100%;
 }
 
-.submit-btn button {
-  border: none;
-  background: #2b70dc;
+.submit-btn {
+  background: linear-gradient(to bottom, #0069ff, #0066f8, #0063f1, #0061ea, #005ee3);
   color: #fff;
-  padding: 0.5em 1em;
   font-weight: 600;
-  font-size: 1.2rem;
-  border-radius: 0.3em;
-  transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+  margin: 1.5em 0 0.5em 0;
+  cursor: pointer;
+  padding: 0.7em 1em;
+  border: none;
+  border-radius: 0.35em;
+  display: block;
+  transition: all 0.2s ease-in-out;
+  width: 70px;
 }
 
-.submit-btn button:hover {
-  transform: translate(-0.7px, -0.7px);
-  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+.submit-btn:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .spacer {
   width: 20%;
-  margin: auto;
-  margin: 0.5em auto;
+  margin: 0.8em auto;
 }
 
 .spacer span {

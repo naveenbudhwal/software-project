@@ -17,7 +17,7 @@
       },
     },
     mounted() {
-      this.timeout = setTimeout(() => this.remove(this.notification), 2000)
+      this.timeout = setTimeout(() => this.remove(this.notification), this.notification.timeout)
     },
     beforeDestroy() {
       clearTimeout(this.timeout)
@@ -40,6 +40,8 @@
 .notification-bar {
   margin: 1em 0 1em;
   padding: 1em;
+  border-radius: 0.8em;
+  font-weight: 600;
 }
 
 p {
@@ -48,18 +50,18 @@ p {
 }
 
 .-text-success {
-  color: #4F8A10;
-  background-color: #DFF2BF;
-}
-
-.-text-info {
-  color: #00529B;
-  background-color: #BDE5F8;
+  color: #39b982;
+  background-color: #CFFBE2;
 }
 
 .-text-error {
   color: #D8000C;
   background-color: #FFD2D2;
+}
+
+.-text-info {
+  color: #00529B;
+  background-color: #BDE5F8;
 }
 
 /* ------------ Transition styles -------------- */
