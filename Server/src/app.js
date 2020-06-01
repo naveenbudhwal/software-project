@@ -4,7 +4,9 @@ const express    = require('express'),
       bodyParser = require('body-parser'),
       cors       = require('cors'),
       morgan     = require('morgan'),
-      mongo      = require('mongodb')
+      mongo      = require('mongodb'),
+      bcrypt     = require('bcrypt')
+      saltRounds = 10;
 
 const MongoClient = mongo.MongoClient
 const uri =
@@ -123,6 +125,7 @@ app.post('/addOrder', (req, res) => {
   const order = {
     foodItems: req.body.foodItems,
     billTotal: req.body.billTotal,
+    feedback: '',
     time: req.body.currentTime,
     date: req.body.currentDate
   }
@@ -198,54 +201,57 @@ app.post('/user', verifyToken, (req, res) => {
     }
   })
 })
+  
 
 app.post('/register', (req, res) => {
-  const user = {}
-  if(req.body) {
-    user.name = req.body.name
-    user.email = req.body.email
-    user.password = req.body.password
-  }
 
   const collection = client.db('Restaurant').collection('user')
-  collection.insertOne({ name: user.name, email: user.email, password: user.password, role: 'user' }, function(err, results) {
-    if(err) {
-      res.send('')
-      return 
-    } else {
-      const token = jwt.sign({ user }, 'the_secret_key')
-      // In a production app, you'll want the secret key to be an environment variable
-      res.json({
-        token,
-        email: user.email,
-        name: user.name
+  
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(req.body.password, salt, function(err, hash) {
+      // Store hash in your password DB.
+      collection.insertOne({ name: req.body.name, email: req.body.email, password: hash, role: 'user' }, function(err, results) {
+        if(err) {
+          res.send('')
+          return 
+        } else {
+          const token = jwt.sign(results.ops[0], 'the_secret_key')
+          // In a production app, you'll want the secret key to be an environment variable
+          res.json({
+            token,
+            email: results.ops[0].email,
+            name: results.ops[0].name
+          })
+        }
       })
-    }
-  })
+    });
+  });
 })
 
 app.post('/login', (req, res) => {
   const collection = client.db('Restaurant').collection('user')
-  // const userInfo = JSON.parse(userDB)
 
-  // const query = { "name": req.body.name, "password": req.body.password };
-
-  collection.findOne({ email: req.body.email, password: req.body.password })
-  .then(result => {
-    if(result) {
-      // console.log(`Successfully found document: ${result}.`);
-      const token = jwt.sign(result, 'the_secret_key')
-      // In a production app, you'll want the secret key to be an environment variable
-      res.json({
-        token,
-        email: result.email,
-        name: result.name,
-        role: result.role
+  collection.findOne({ email: req.body.email })
+      .then(user => {
+        if(user) {
+          bcrypt.compare(req.body.password, user.password, function(err, result) {
+            if(result) {
+              const token = jwt.sign(user, 'the_secret_key')
+              // In a production app, you'll want the secret key to be an environment variable
+              res.json({
+                token,
+                email: user.email,
+                name: user.name,
+                role: user.role
+              })
+            } else {
+              res.status(401).json({ error: 'Invalid Password. Please try again.'})    
+            }
+          });  
+        } else {
+          res.status(401).json({ error: 'Invalid Username. Please try again.'})
+        }
       })
-    } else {
-      res.status(401).json({ error: 'Invalid Username/Password. Please try again.'})
-    }
-  })
 })
 
 // MIDDLEWARE
